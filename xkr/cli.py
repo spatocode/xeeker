@@ -1,3 +1,4 @@
+import platform
 import sys
 
 import click
@@ -7,7 +8,7 @@ from xkr import __version__
 from xkr.main import system_data_usage
 
 def version_msg():
-    os = ''
+    os = platform.system().lower()
     return f'xeeker version xkr{__version__} {os}'
 
 
@@ -22,10 +23,10 @@ def main(command, process, interface, period):
         click.echo(click.get_current_context().get_help())
         sys.exit(0)
 
-    if process and not process.isnumeric() or not psutil.pid_exists(int(process)):
+    if process and (not process.isnumeric() or not psutil.pid_exists(int(process))):
         click.echo(f"Process ID '{process}' does not exist in current running processes")
         sys.exit(0)
-    
+
     click.echo(system_data_usage(period))
 
 
